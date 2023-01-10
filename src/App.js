@@ -1,18 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
-import React,{useState} from "react"
+import React,{useState} from "react";
+import InputField from "./Commoncomponent/FormInput"
 
 function App() {
- const [state, setstate] = useState("")
- const handleClick=()=>{
-  setstate("hello")
- }
+  const [inputValue, setInputValue] =useState({
+    name:"",
+    price:""
+  })
+  const handleChange = (input) => {
+   
+   
+      setInputValue({ name: input.name, price: input.price });
+
+     
+  
+};
+console.log(123,inputValue)
+  
   return (
     <div className="App">
-      <h1>{state}</h1>
-    <button onClick={()=>handleClick()}>
-     click mewerrrrrrrrrrrrrrrrrrrrrrrr
-    </button>
+     
+    <form>
+    <InputField
+        type="text"
+        value={inputValue.name}
+        name="name"
+        placeholder="Product Name"
+        label="Name"
+        onChange={handleChange}
+      />
+      <InputField
+        type="number"
+        name="price"
+        value={inputValue.price}
+        placeholder="Add Price"
+        label="Price"
+        onChange={handleChange}
+      />
+    </form>
+
     </div>
   );
 }
