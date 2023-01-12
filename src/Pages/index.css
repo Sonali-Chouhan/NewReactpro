@@ -1,7 +1,28 @@
 .container {
-    width: 30vw;
-    height: 80vh;
-    border: 1px solid;
-    padding: 10px;
-    margin: 20px;
+    width:  20vw;
+    height: 40vh;
+    /* border: 1px solid; */
+  background-color: #8aa6de;
+    
 }
+.container h2{
+    color: black;
+}
+
+.form-group{
+    width: 30%;
+    text-align: center;
+   margin-left:  32%;
+
+}
+.btn btn-default{
+    width: 30px;
+    border: none;
+    height: 20px;
+
+}
+/* .btn btn-default button{
+    background-color: red;
+} */
+
+

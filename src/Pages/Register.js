@@ -20,7 +20,7 @@ function Register(){
     
 return(
         <div className="container">
-         Registration Form
+   <h2>  Registration Form</h2>     
          <form>
                 <InputField
                     type="text"
