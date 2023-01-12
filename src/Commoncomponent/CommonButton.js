@@ -1,4 +1,5 @@
 import React from 'react';
+// import './index.css'
 
 const buttonStyle = {
     margin: '10px 0',
