@@ -1,21 +1,36 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GetRoute} from "../api/ApiRoutesHelper";
+import {  getUserNetworkRoute } from "../api/ApiRoutesHelper";
 import apiClient from "../api/apiClient";
 
 const initialState = {
-   getApiStatus: false,
-   getApi: "",
-   getApiErr: false
+    getApiStatus: false,
+    getApi: "",
+    getApiErr: ""
 }
 
-export const GetApiResponse = createAsyncThunk('Getapi/GetApiResponse', async(data,{ rejectWithValue, fulfillWithValue }) => {
+// export const GetApiResponse = createAsyncThunk('Getapi/GetApiResponse', async (data, { rejectWithValue, fulfillWithValue }) => {
+//     try {
+//         const response = await apiClient({ method: 'GET', endPoint: GetRoute() })
+//         // return response
+//         return fulfillWithValue(response.data)
+//     }
+//     catch (error) {
+//         if (error?.response?.data) {
+//             return rejectWithValue(error.response.data)
+//         }
+//         else {
+//             return rejectWithValue(error)
+//         }
+//     }
+// })
+export const getUserNetwok = createAsyncThunk('netwok/getUserNetwok', async(_,{ rejectWithValue, fulfillWithValue, dispatch }) => {
     try{
-        const response = await apiClient({method: 'GET', endPoint: GetRoute()})
-        // return response
+        const response = await apiClient({method: 'GET', endPoint: getUserNetworkRoute()})
        return fulfillWithValue(response.data)
     }
     catch(error){
         if(error?.response?.data){
+            // dispatch(getError(error?.response?.data))
             return rejectWithValue(error.response.data)
         }
         else {
@@ -23,44 +38,29 @@ export const GetApiResponse = createAsyncThunk('Getapi/GetApiResponse', async(da
         }
     } 
 })
-
 const getSlice = createSlice({
-    name: 'Getapi',
+    name: 'netwok',
     initialState,
-    reducers:{
-        changeStatus(state,action){
-            state.GetApi=""
+    reducers: {
+        changeStatus(state, action) {
+            state.getApi = ""
         }
     },
-    extraReducers : (builder) => {
+    extraReducers: (builder) => {
         builder
-          .addCase(GetApiResponse.pending, (state, action) => {
-            state.getApiStatus = 'loading'
-          })
-          .addCase(GetApiResponse.fulfilled, (state, action) => {
-            state.getApiStatus = "succeeded"
-            state.getApi = action?.payload;
-            console.log(43,state.getApi);
-          })
-          .addCase(GetApiResponse.rejected, (state, action) => {
-            state.getApiStatus = "failed";
-            state.getApiErr = action.payload;
-          })
-    // extraReducers: {
-    //     [GetApiResponse.pending]: (state, action) => {
-    //         state.getApiStatus = 'loading'
-    //     },
-    //     [GetApiResponse.fulfilled]: (state, action) => {
-    //         state.getApiStatus = "succeeded"
-    //         state.getApi = action.payload
-    //         console.log(43,state.getApi)
-    //     },
-    //     [GetApiResponse.rejected]: (state, action) => {
-    //         state.getApiStatus = "failed"
-    //         state.getApiErr = action.payload
-    //     }
-    // }
-        }
+            .addCase(getUserNetwok.pending, (state, action) => {
+                state.getApiStatus = 'loading'
+            })
+            .addCase(getUserNetwok.fulfilled, (state, action) => {
+                state.getApiStatus = "succeeded"
+                state.getApi = action?.payload;
+            })
+            .addCase(getUserNetwok.rejected, (state, action) => {
+                state.getApiStatus = "failed";
+                state.getApiErr = action.payload;
+            })
+
+    }
 })
 export const { changeStatus } = getSlice.actions;
 export default getSlice.reducer;
