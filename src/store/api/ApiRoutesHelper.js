@@ -1,6 +1,4 @@
-export const GetRoute= ()=>{
+
+export const getUserNetworkRoute =()=>{
     return '/post'
 }
-// export const getEventRoute= ()=>{
-//     return '/show'
-// }

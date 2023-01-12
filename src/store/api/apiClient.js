@@ -5,7 +5,6 @@ const apiClient = ({ method, endPoint, header, body, baseUrl }) => {
     switch (method) {
         case "GET":
             if(baseUrl){
-                debugger
                 res = instance({ baseURL: baseUrl, method: "GET", url: endPoint})
             }
             else{
