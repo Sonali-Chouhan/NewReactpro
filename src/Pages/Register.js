@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../Commoncomponent/CommonButton";
 import InputField from "../Commoncomponent/FormInput";
-import './index.css';
+// import './index.css';
 
 function Register(){
 
