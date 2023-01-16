@@ -5,21 +5,24 @@ import { getUserNetwok } from '../store/reducers/authReducer';
 import { toast } from 'react-toastify';
 import Pagination from '../Commoncomponent/CommonPaginations';
 import { ListingLoading } from '../Commoncomponent/Loading';
+import './index.css'
+import Button from '../Commoncomponent/CommonButton';
 
 const Dashboard = () => {
-
-    const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(10);
-
+   
     const dispatch = useDispatch();
     const getData = useSelector((state) => state?.Getapi)
-
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = getData?.getApi.slice(indexOfFirstPost, indexOfLastPost);
     const currentlenght = getData?.getApi?.length
-
+    const [list,setList] = useState([...currentPosts])
+    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(10);
+    const [search,setSearch] = useState()
+    console.log(1212,list);
+    
     useEffect(() => {
         dispatch(getUserNetwok())
     }, [])
@@ -38,9 +41,9 @@ const Dashboard = () => {
                     toastId: "succeeded-1"
                 })
             }
-          }, 3000);
-       
-        if (getData.getApiStatus ==="failed") {
+        }, 3000);
+
+        if (getData.getApiStatus === "failed") {
             toast.error(`${getData.getApiStatus}`, {
                 toastId: "failed-1"
             })
@@ -51,48 +54,66 @@ const Dashboard = () => {
     if (loading) {
         return <ListingLoading />
     }
+
+const handleChange = (e)=>{
+ setSearch(e.target.value)
+}
+const serchNow =()=>{
+    debugger
+    const filtered = !search ? currentPosts 
+    : currentPosts?.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+      setList(...list,filtered)
+}
+
+
     return (
         <div>
-
-            <Table striped bordered hover variant="dark">
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Created at</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                       currentPosts ? currentPosts?.map((item) => {
-                            return (
-                                <tr key={item.id}>
-                                    <td>{item.id}</td>
-                                    <td><img src={item.avatar} height="40px" width="40px" alt={item.avatar} /></td>
-                                    <td>{item?.name}</td>
-                                    <td>{item.createdAt}</td>
-                                </tr>
-                            )
-                        })
-                            :
-                            <tr style={{ color: "black" }}>
-                                <td>Data Not Found</td>
-                            </tr>
-                    }
-                </tbody>
-
-
-            </Table>
-            <div className='maindivpagination'>
-            <Pagination
-                currentPage={currentPage}
-                postsPerPage={postsPerPage}
-                totalPosts={currentlenght}
-                paginate={paginate}
+            Name:<input
+                type='text'
+                onChange={(e)=>handleChange(e)}
             />
-            </div>
+            <button onClick={serchNow}>filter</button>
+            <div className='table'>
 
+                <Table striped bordered hover variant="dark">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Created at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            list? list?.map((item) => {
+                                return (
+                                    <tr key={item.id}>
+                                        <td>{item.id}</td>
+                                        <td><img src={item.avatar} height="40px" width="40px" alt={item.avatar} /></td>
+                                        <td>{item?.name}</td>
+                                        <td>{item.createdAt}</td>
+                                    </tr>
+                                )
+                            })
+                                :
+                                <tr style={{ color: "black" }}>
+                                    <td>Data Not Found</td>
+                                </tr>
+                        }
+                    </tbody>
+                </Table>
+                <div className='maindivpagination'>
+                    <Pagination
+                        currentPage={currentPage}
+                        postsPerPage={postsPerPage}
+                        totalPosts={currentlenght}
+                        paginate={paginate}
+                    />
+                </div>
+            </div>
         </div>
     )
 }
