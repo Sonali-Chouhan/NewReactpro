@@ -42,34 +42,26 @@ const Dashboard = () => {
     }, [getData.getApiStatus, search])
 
 
-    const handleChange = (e) => {
-        let searchText = e.target.value;
-        if (searchText.length > 0) {
-            setSearch(e.target.value)
-        } else {
-            setSearch("");
-        }
-        // if (search === "") {
-        //     setList(list)
-        // }
-    }
-
     const filterRecord = () => {
-
-        // e.preventDefault();
         const filterd = list?.filter((element) => {
-            // debugger
-            return element?.name?.toLowerCase().includes(search?.toLowerCase()) &&
+            if(search){
+                return element?.name?.toLowerCase().includes(search?.toLowerCase())
+            }
+            else if (search !== "" && createdat !== "") {   
+                return element?.name?.toLowerCase().includes(search?.toLowerCase()) &&
                 element?.createdAt?.toLowerCase().includes(createdat?.toLowerCase())
+            }
+            else if (createdat) {
+                return element?.createdAt?.toLowerCase().includes(createdat?.toLowerCase())
+            }
         })
         setList(filterd)
     }
-    // const clearData = (e) => {
-    //     e.preventDefault();
-    //     // dispatch(getUserNetwok())
-    //     console.log(222)
-    //     // setSearch("");
-    // }
+    const clearData = () => {
+        setSearch("")
+        setCreatedAt("")
+        dispatch(getUserNetwok())
+    }
     console.log(777, createdat);
     return (
         <div>
@@ -79,7 +71,8 @@ const Dashboard = () => {
                 <input
                     className='grocery'
                     type='text'
-                    onChange={(e) => handleChange(e)}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                 />
                 <label className='datediv'>Date:</label>
                 <input
@@ -89,7 +82,7 @@ const Dashboard = () => {
                     onChange={(e) => setCreatedAt(e.target.value)}
                 />
                 <button className='submit-btn' onClick={() => filterRecord()}>filter</button>
-                {/* <button className='submit-btn' onClick={(e) => clearData(e)}>Clear</button> */}
+                <button className='submit-btn' onClick={() => clearData()} >Clear</button>
             </div>
             <div className='table'>
 
