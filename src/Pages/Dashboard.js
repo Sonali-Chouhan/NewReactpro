@@ -9,20 +9,14 @@ import './index.css'
 import Button from '../Commoncomponent/CommonButton';
 
 const Dashboard = () => {
-   
+    const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("")
     const dispatch = useDispatch();
     const getData = useSelector((state) => state?.Getapi)
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = getData?.getApi.slice(indexOfFirstPost, indexOfLastPost);
-    const currentlenght = getData?.getApi?.length
-    const [list,setList] = useState([...currentPosts])
-    const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(10);
-    const [search,setSearch] = useState()
-    console.log(1212,list);
-    
+    const [list, setList] = useState([])
+    const [createdat, setCreatedAt] = useState()
+
+    console.log(111, search)
     useEffect(() => {
         dispatch(getUserNetwok())
     }, [])
@@ -30,51 +24,73 @@ const Dashboard = () => {
     useEffect(() => {
         if (getData.getApiStatus === "loading") {
             setLoading(true);
-            // toast.warning(`${getData.getApiStatus}`,{
-            //     toastId:"loading-1"      
+        }
+
+        if (getData.getApiStatus === "succeeded") {
+            setLoading(false)
+            setList(getData.getApi)
+            // toast.success(`${getData.getApiStatus}`, {
+            //     toastId: "succeeded-1"
             // })
         }
-        setTimeout(() => {
-            if (getData.getApiStatus === "succeeded") {
-                setLoading(false)
-                toast.success(`${getData.getApiStatus}`, {
-                    toastId: "succeeded-1"
-                })
-            }
-        }, 3000);
 
         if (getData.getApiStatus === "failed") {
             toast.error(`${getData.getApiStatus}`, {
                 toastId: "failed-1"
             })
         }
-    }, [getData.getApiStatus])
+    }, [getData.getApiStatus, search])
 
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-    if (loading) {
-        return <ListingLoading />
+
+    const handleChange = (e) => {
+        let searchText = e.target.value;
+        if (searchText.length > 0) {
+            setSearch(e.target.value)
+        } else {
+            setSearch("");
+        }
+        // if (search === "") {
+        //     setList(list)
+        // }
     }
 
-const handleChange = (e)=>{
- setSearch(e.target.value)
-}
-const serchNow =()=>{
-    debugger
-    const filtered = !search ? currentPosts 
-    : currentPosts?.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      );
-      setList(...list,filtered)
-}
+    const filterRecord = () => {
 
-
+        // e.preventDefault();
+        const filterd = list?.filter((element) => {
+            // debugger
+            return element?.name?.toLowerCase().includes(search?.toLowerCase()) &&
+                element?.createdAt?.toLowerCase().includes(createdat?.toLowerCase())
+        })
+        setList(filterd)
+    }
+    // const clearData = (e) => {
+    //     e.preventDefault();
+    //     // dispatch(getUserNetwok())
+    //     console.log(222)
+    //     // setSearch("");
+    // }
+    console.log(777, createdat);
     return (
         <div>
-            Name:<input
-                type='text'
-                onChange={(e)=>handleChange(e)}
-            />
-            <button onClick={serchNow}>filter</button>
+            <div className='filterbox'>
+
+                <label>Name:</label>
+                <input
+                    className='grocery'
+                    type='text'
+                    onChange={(e) => handleChange(e)}
+                />
+                <label className='datediv'>Date:</label>
+                <input
+                    className='grocery'
+                    type='date'
+                    value={createdat}
+                    onChange={(e) => setCreatedAt(e.target.value)}
+                />
+                <button className='submit-btn' onClick={() => filterRecord()}>filter</button>
+                {/* <button className='submit-btn' onClick={(e) => clearData(e)}>Clear</button> */}
+            </div>
             <div className='table'>
 
                 <Table striped bordered hover variant="dark">
@@ -88,7 +104,7 @@ const serchNow =()=>{
                     </thead>
                     <tbody>
                         {
-                            list? list?.map((item) => {
+                            list ? list?.map((item) => {
                                 return (
                                     <tr key={item.id}>
                                         <td>{item.id}</td>
@@ -106,12 +122,7 @@ const serchNow =()=>{
                     </tbody>
                 </Table>
                 <div className='maindivpagination'>
-                    <Pagination
-                        currentPage={currentPage}
-                        postsPerPage={postsPerPage}
-                        totalPosts={currentlenght}
-                        paginate={paginate}
-                    />
+
                 </div>
             </div>
         </div>
@@ -119,3 +130,18 @@ const serchNow =()=>{
 }
 
 export default Dashboard
+
+// const currentPosts = getData?.getApi.slice(indexOfFirstPost, indexOfLastPost);
+// const currentlenght = getData?.getApi?.length
+// const paginate = pageNumber => setCurrentPage(pageNumber);
+// if (loading) {
+//     return <ListingLoading />
+// }
+// const indexOfLastPost = currentPage * postsPerPage;
+// const indexOfFirstPost = indexOfLastPost - postsPerPage;
+{/* <Pagination
+                        currentPage={currentPage}
+                        postsPerPage={postsPerPage}
+                        totalPosts={currentlenght}
+                        paginate={paginate}
+                    /> */}
