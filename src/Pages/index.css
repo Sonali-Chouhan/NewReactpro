@@ -2,7 +2,67 @@
     width: 89% !important;
     height: 90%;
     margin-left: 65px;
+    margin-top: 25p
 }
 .maindivpagination{
     margin: 0px 119px 14px 1158px;
 }
+.filterbox{
+  width: 88%;
+  height: 68px;
+  border: 3px solid black;
+  margin: 17px 120px 10px 69px;
+  display: flex;
+  text-align: center;
+  padding-top: 8px;
+}
+.grocery {
+  padding: 7px;
+  background: #e4ebf1;
+  border-radius: 30px;
+  border-color: transparent;
+  /* font-size: 1rem; */
+  flex: 1 0 auto;
+  color: black;
+  margin-bottom: auto;
+  }
+  
+  .submit-btn{
+    margin-right: 25px;
+    background-color: black;
+    color: #F1F5F8;
+    border-radius: 6px;
+    width: 76px;
+    margin-left: 15px;
+  }
+  .datediv{
+    margin-left: 30px;
+  }
+  .container {
+    width: 70vw;
+    height: 80vh;
+    /* display: flex; */
+    /* border: 1px solid; */
+    background-color: #787d88;
+    display: block;  
+  }
+  
+  .container h2{
+    color: black;
+  }
+  .label{
+    display: flex;
+    align-content: flex-start;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .modal-input{
+    padding: 7px;
+    width: 335px;
+    margin: 5px;
+  }
+  .modal-form{
+    margin: 14%;
+  }
