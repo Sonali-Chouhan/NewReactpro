@@ -1,11 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {  getUserNetworkRoute } from "../api/ApiRoutesHelper";
+import {  getUserNetworkRoute,getUserModalRoute } from "../api/ApiRoutesHelper";
 import apiClient from "../api/apiClient";
 
 const initialState = {
     getApiStatus: false,
     getApi: "",
-    getApiErr: ""
+    getApiErr: "",
+    singleRecordApiStatus: false,
+    singleRecordApi: "",
+    singleRecordApiErr: ""
 }
 
 // export const GetApiResponse = createAsyncThunk('Getapi/GetApiResponse', async (data, { rejectWithValue, fulfillWithValue }) => {
@@ -38,6 +41,21 @@ export const getUserNetwok = createAsyncThunk('netwok/getUserNetwok', async(_,{ 
         }
     } 
 })
+export const getUserNetwoks = createAsyncThunk('netwok/getUserNetwoks', async(id ,{ rejectWithValue, fulfillWithValue, dispatch }) => {
+    try{
+        const response = await apiClient({method: 'GET', endPoint: getUserModalRoute(id)})
+       return fulfillWithValue(response.data)
+    }
+    catch(error){
+        if(error?.response?.data){
+            // dispatch(getError(error?.response?.data))
+            return rejectWithValue(error.response.data)
+        }
+        else {
+            return rejectWithValue(error)
+        }
+    } 
+})
 const getSlice = createSlice({
     name: 'netwok',
     initialState,
@@ -58,6 +76,17 @@ const getSlice = createSlice({
             .addCase(getUserNetwok.rejected, (state, action) => {
                 state.getApiStatus = "failed";
                 state.getApiErr = action.payload;
+            })
+            .addCase(getUserNetwoks.pending, (state, action) => {
+                state.singleRecordApiStatus = 'loading'
+            })
+            .addCase(getUserNetwoks.fulfilled, (state, action) => {
+                state.singleRecordApiStatus = "succeeded"
+                state.singleRecordApi = action?.payload;
+            })
+            .addCase(getUserNetwoks.rejected, (state, action) => {
+                state.singleRecordApiStatus = "failed";
+                state.singleRecordApi = action.payload;
             })
 
     }
